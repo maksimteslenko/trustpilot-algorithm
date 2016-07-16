@@ -1,0 +1,6 @@
+C:\Users\Max\Documents\Visual Studio 2012\Projects\trustpilotexercise\trustpilotexercise\bin\Debug\trustpilotexercise.exe.config
+C:\Users\Max\Documents\Visual Studio 2012\Projects\trustpilotexercise\trustpilotexercise\bin\Debug\trustpilotexercise.exe
+C:\Users\Max\Documents\Visual Studio 2012\Projects\trustpilotexercise\trustpilotexercise\bin\Debug\trustpilotexercise.pdb
+C:\Users\Max\Documents\Visual Studio 2012\Projects\trustpilotexercise\trustpilotexercise\obj\Debug\trustpilotexercise.csprojResolveAssemblyReference.cache
+C:\Users\Max\Documents\Visual Studio 2012\Projects\trustpilotexercise\trustpilotexercise\obj\Debug\trustpilotexercise.exe
+C:\Users\Max\Documents\Visual Studio 2012\Projects\trustpilotexercise\trustpilotexercise\obj\Debug\trustpilotexercise.pdb
