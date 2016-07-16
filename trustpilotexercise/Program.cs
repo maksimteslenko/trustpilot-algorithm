@@ -26,7 +26,7 @@ namespace trustpilotexercise
 
             Console.WriteLine("Searching..........");
             bool stop = false;
-            for (int i = 0; i < words.Count && !stop; i++)//Работаем со 1-ым словом - погнали!
+            for (int i = 0; i < words.Count && !stop; i++)//Working with the first word!
             {
                 string fullAnagramSorted = sortedAnagram;
                 string word1 = words[i];// 1ое слово
