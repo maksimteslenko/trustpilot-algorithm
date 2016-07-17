@@ -13,7 +13,6 @@ namespace trustpilotexercise
 
         static void Main(string[] args)
         {
-            // Погнали.......
             string questionString = "poultry outwits ants";
             string sortedAnagram = SortString(questionString);
 
@@ -29,28 +28,34 @@ namespace trustpilotexercise
             for (int i = 0; i < words.Count && !stop; i++)//Working with the first word!
             {
                 string fullAnagramSorted = sortedAnagram;
-                string word1 = words[i];// 1ое слово
-                string anagramMinusWord1 = RemoveCharacters(fullAnagramSorted, word1); // удаляем буквы первого слова из анаграммы 
+                string word1 = words[i];// 1st word
+                string anagramMinusWord1 = RemoveCharacters(fullAnagramSorted, word1); // delete letters of the first word from the anagram 
 
-                for (int j = 0; j < words.Count && !stop; j++)//Работаем со 2-ым словом - погнали!
+                List<string> filteredWords = GetFilteredWords(words, anagramMinusWord1);
+
+                for (int j = 0; j < filteredWords.Count && !stop; j++)//working with the second word
                 {
-                    string word2 = words[j];
+                    string word2 = filteredWords[j];
 
-                    if (ContainsAll(anagramMinusWord1, word2) && !word1.Equals(word2)) // Если буквы слова2(word2) cодержатся в буквах Анграммы-буквы первого слова1 --> тогда слово2 нам интересно и мы можем с ним работать
+                    if (ContainsAll(anagramMinusWord1, word2) && !word1.Equals(word2))
                     {
-                        // У нас есть 2 слова, которые мы можем составить из букв Анаграммы ==> "pastils turnout towy"
-                        string anagramMinusWord1AndWord2 = RemoveCharacters(anagramMinusWord1, word2); // удаляем буквы слова2 из анаграммы
+                        // We have two words, which can make out of anagram ==> "pastils turnout towy"
+                        string anagramMinusWord1AndWord2 = RemoveCharacters(anagramMinusWord1, word2); // deleting the letters of the second word from the anagram
 
-                        for (int k = 0; k < words.Count; k++)// Пробуем найти 3-ье слово -> Погнали !
+                        List<string> filteredWords2 = GetFilteredWords(filteredWords, anagramMinusWord1AndWord2);
+
+                        for (int k = 0; k < filteredWords2.Count; k++)// looking for 3rd word
                         {
-                            string word3 = words[k]; // слово3
+                            string word3 = filteredWords2[k]; // word3
 
-                            if (!word3.Equals(word1) && !word3.Equals(word2)) // если слово3 != слову1 и слову2, тогда оно нам интересно - погнали!
+                            int phraseLength = word1.Length + word2.Length + word3.Length;
+
+                            if (phraseLength ==  sortedAnagram.Length && !word3.Equals(word1) && !word3.Equals(word2)) // if word3 != word1 and word2, the its good!
                             {
-                                string sortedPossiblePhrase = SortString(word1 + " " + word2 + " " + word3); // метогд возвращает отсортированный string по алфавиту
-                                if (sortedPossiblePhrase.Equals(sortedAnagram)) //если у нас есть совпадение всех букв фразы и анаграммы, то уже очень ГОРЯЧО, почти что сосиска в тесте!
+                                string sortedPossiblePhrase = SortString(word1 + " " + word2 + " " + word3); // method returns sorted by alphabet string
+                                if (sortedPossiblePhrase.Equals(sortedAnagram)) //!
                                 {
-                                    string answer = RunHashTest(word1, word2, word3); // генерируем md5Hash для каждой фразы и сравниваем с hashom который нам дали в задании
+                                    string answer = RunHashTest(word1, word2, word3); // generating md5Hash for each phrase and then comparing with hash in the assignment
                                     if (answer != null)
                                     {
                                         Console.WriteLine("Eureka");
@@ -67,10 +72,9 @@ namespace trustpilotexercise
 
             Console.WriteLine("Finished. Time spent = " + (DateTime.UtcNow - start));
             Console.ReadLine();
-
         }
 
-        //Удалить из словаА(fullAnagram) все буквы содержащиеся в словеБ(word1)
+        //delete from fullAnagram the letters which consist in word1
         private static string RemoveCharacters(string fullAnagram, string word1)
         {
             var charsToBeRemoved = word1.ToCharArray();
@@ -88,12 +92,12 @@ namespace trustpilotexercise
             return wordToReturn;
         }
 
-        //Проверить содержит ли СловаА(testString) все буквы из Слова Б(word)
+        //Check if testString has letters from word
         public static bool ContainsAll(string testString, string word)
         {
-            foreach (var bukva in word)
+            foreach (var letter in word)
             {
-                if (testString.IndexOf(bukva) < 0)
+                if (testString.IndexOf(letter) < 0)
                 {
                     return false;
                 }
@@ -101,7 +105,7 @@ namespace trustpilotexercise
             return true;
         }
 
-        // Проверить есть ли среди возможных фраз(List<string> list) секретная фраза, которая даёт искомый hashCode
+        // Check if in the list of possible phrases (List<string> list) there is a secret phrase which gives the hashCode we are looking for
         private static string RunHashTest(string word1, string word2, string word3)
         {
             Dictionary<string, string> hashesMap = new Dictionary<string, string>() { };
@@ -120,35 +124,35 @@ namespace trustpilotexercise
             return null;
         }
 
-        //Экспорт и Фильтрация слова
+        //Import from file and filter the words
         public static List<string> GetWords()
         {
             string sortedAnagram = SortString("poultry outwits ants");
 
-            List<string> slova = new List<string>();
+            List<string> wordList = new List<string>();
 
             string[] words = System.IO.File.ReadAllLines(@"wordlist.txt");
             // string[] words = System.IO.File.ReadAllLines(@"test.txt");
 
             foreach (string word in words)
             {
-                string slovo = word.Trim();
-                if (slovo.Length == 4 || slovo.Length == 7)  //remove words with ' character, example --> abusivenes's
+                string cleanWord = word.Trim();
+                if (cleanWord.Length == 4 || cleanWord.Length == 7)  //remove words with ' character, example --> abusivenes's
                 {
-                    if (!slovo.Trim().Contains("'"))//remove words with wrong Length
+                    if (!cleanWord.Trim().Contains("'"))//remove words with wrong Length
                     {
-                        if (ContainsAll(sortedAnagram, slovo)) // remove words which cannot be created from characters in "poultry outwits ants" test string
+                        if (ContainsAll(sortedAnagram, cleanWord)) // remove words which cannot be created from characters in "poultry outwits ants" test string
                         {
-                            slova.Add(slovo);
+                            wordList.Add(cleanWord);
                         }
                     }
                 }
             }
 
-            return slova;
+            return wordList;
         }
 
-        //Принимаем слово и перестанавливаем его буквы в алфавитном порядке: coconut ==> ccnoot
+        //Take a word and sort it in alphabetical order: coconut ==> ccnoot
         public static string SortString(string word)
         {
             char[] foo = word.Replace(" ", "").ToArray();
@@ -178,6 +182,20 @@ namespace trustpilotexercise
             return hashedString;
         }
 
+        //Remove words that cannot be created from characters in updated anagram
+        public static List<string> GetFilteredWords(List<string> words, string anagram) 
+        {
+            List<string> suitableWords = new List<string>();
+
+            foreach (var word in words)
+            {
+                if (ContainsAll(anagram, word))
+                {
+                    suitableWords.Add(word);
+                }
+            }
+            return suitableWords;
+        }
     }
 }
 
